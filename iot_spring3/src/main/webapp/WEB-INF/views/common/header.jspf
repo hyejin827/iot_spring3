@@ -1,0 +1,78 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+	
+<header class="header">
+  <div class="burger">
+    <div class="burger__patty"></div>
+    <div class="burger__patty"></div>
+    <div class="burger__patty"></div>
+  </div>
+
+  <nav class="menu">
+    <div class="menu__brand">
+      <a href=""><div class="logo"></div></a>
+    </div>
+    <ul class="menu__list">
+      <li class="menu__item"><a href="${root}/" class="menu__link">Home</a></li>
+      <li class="menu__item"><a href="${root}/path/user_info/list" class="menu__link">리스트</a></li>
+      <li class="menu__item"><a href="" class="menu__link">aaa</a></li>
+      <li class="menu__item"><a href="" class="menu__link">bbb</a></li>
+    </ul>
+  </nav>
+</header>
+
+
+<script>
+(function() {
+	  
+	  var Menu = (function() {
+	    var burger = document.querySelector('.burger');
+	    var menu = document.querySelector('.menu');
+	    var menuList = document.querySelector('.menu__list');
+	    var brand = document.querySelector('.menu__brand');
+	    var menuItems = document.querySelectorAll('.menu__item');
+	    
+	    var active = false;
+	    
+	    var toggleMenu = function() {
+	      if (!active) {
+	        menu.classList.add('menu--active');
+	        menuList.classList.add('menu__list--active');
+	        brand.classList.add('menu__brand--active');
+	        burger.classList.add('burger--close');
+	        for (var i = 0, ii = menuItems.length; i < ii; i++) {
+	          menuItems[i].classList.add('menu__item--active');
+	        }
+	        
+	        active = true;
+	      } else {
+	        menu.classList.remove('menu--active');
+	        menuList.classList.remove('menu__list--active');
+	        brand.classList.remove('menu__brand--active');
+	        burger.classList.remove('burger--close');
+	        for (var i = 0, ii = menuItems.length; i < ii; i++) {
+	          menuItems[i].classList.remove('menu__item--active');
+	        }
+	        
+	        active = false;
+	      }
+	    };
+	    
+	    var bindActions = function() {
+	      burger.addEventListener('click', toggleMenu, false);
+	    };
+	    
+	    var init = function() {
+	      bindActions();
+	    };
+	    
+	    return {
+	      init: init
+	    };
+	    
+	  }());
+	  
+	  Menu.init();
+	  
+	}());
+</script>

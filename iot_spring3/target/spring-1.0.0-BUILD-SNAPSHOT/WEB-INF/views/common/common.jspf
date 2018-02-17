@@ -1,0 +1,22 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="root" value="${pageContext.request.contextPath}"/>
+<c:set var="ver" value="?version=1.0.0"/>
+<c:set var="rPath" value="${root}/resources"/>
+<c:set var="pPath" value="${root}/path"/>
+<c:set var="dPath" value="${rPath}/dx"/>
+
+<link rel="stylesheet" type="text/css" href="${dPath}/fonts/font_roboto/roboto.css${ver}"/>
+<link rel="stylesheet" type="text/css" href="${dPath}/dhtmlx.css${ver}"/>
+<link rel="stylesheet" type="text/css" href="${rPath}/css/common.css${ver}"/>
+<script src="${rPath}/js/jquery.min.js${ver}" charset="utf-8"></script>
+<script src="${rPath}/js/common.js${ver}"></script>
+<script src="${dPath}/dhtmlx.js${ver}" charset="utf-8"></script>
+
+<!-- Chrome, Safari, IE -->
+<link rel="shortcut icon" href="${rPath}/imgs/favicon.png">
+<!-- Firefox, Opera (Chrome and Safari say thanks but no thanks) -->
+<link rel="icon" href="${rPath}/imgs/favicon.png">
