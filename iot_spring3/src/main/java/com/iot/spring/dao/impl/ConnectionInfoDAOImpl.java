@@ -69,5 +69,10 @@ public class ConnectionInfoDAOImpl implements ConnectionInfoDAO {
 	public List<ColumnVO> selectColumnList(SqlSession ss,Map<String,String> map) {
 		return ss.selectList("connection_info.selectColumn",map);
 	}
+	@Override
+	public List<Object> selectSqlList(SqlSession ss, Map<String, Object> map) throws Exception {
+		System.out.println("제발 시발      : "+map);
+		return ss.selectList("connection_info.selectSql",map);
+	}
 
 }

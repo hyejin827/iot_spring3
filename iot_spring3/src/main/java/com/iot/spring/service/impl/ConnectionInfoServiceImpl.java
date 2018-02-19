@@ -85,4 +85,10 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService{
 		SqlSession ss = (SqlSession)hs.getAttribute("sqlSession");
 		return cidao.selectColumnList(ss, map);
 	}
+
+	@Override
+	public List<Object> getSqlList(HttpSession hs, Map<String, Object> map) throws Exception {
+		SqlSession ss = (SqlSession)hs.getAttribute("sqlSession");
+		return cidao.selectSqlList(ss, map);
+	}
 }

@@ -19,6 +19,7 @@ public class ConnectionInfoVO {
 	private int id;
 	private String text;
 	private Object[] items;
+	private String sql;
 	
 	public int getId() {
 		return id;
@@ -92,11 +93,18 @@ public class ConnectionInfoVO {
 	public void setCiEtc(String ciEtc) {
 		this.ciEtc = ciEtc;
 	}
+	public String getSql() {
+		return sql;
+	}
+	public void setSql(String sql) {
+		this.sql = sql;
+	}
 	@Override
 	public String toString() {
 		return "ConnectionInfoVO [ciNo=" + ciNo + ", ciName=" + ciName + ", ciUrl=" + ciUrl + ", ciPort=" + ciPort
 				+ ", ciDatabase=" + ciDatabase + ", ciUser=" + ciUser + ", ciPwd=" + ciPwd + ", ciEtc=" + ciEtc
-				+ ", uiId=" + uiId + ", id=" + id + ", text=" + text + ", items=" + Arrays.toString(items) + "]";
+				+ ", uiId=" + uiId + ", id=" + id + ", text=" + text + ", items=" + Arrays.toString(items) + ", sql="
+				+ sql + "]";
 	}
 	
 }

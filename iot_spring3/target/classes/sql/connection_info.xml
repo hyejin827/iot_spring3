@@ -49,4 +49,8 @@
 		and table_schema=#{dbName}
 		order by ordinal_position;
 	</select>
+	
+	<select id="selectSql" resultType="map" parameterType="map">
+		${sql}
+	</select>
 </mapper>  

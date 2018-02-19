@@ -43,6 +43,7 @@ var bodyLayout, dbTree,winF,popW;
 var aLay, bLay, cLay;
 var bTabs, bTab1, bTab2, bTab3;
 var tableInfoGrid;
+var sqlGrid;
 function columnListCB(res){
 	if(res.list){
 		tableInfoGrid = bTabs.tabs("tableInfo").attachGrid();
@@ -68,29 +69,56 @@ function connectionListCB(res){
 	dbTree = aLay.attachTreeView({
 	    items: res.list
 	});
-	dbTree.attachEvent("onDblClick",function(id){
+	dbTree.attachEvent("onDblClick",function(id){ //id가 1_1, 1_1_1이케 들어옴
 		var level = dbTree.getLevel(id);
 		if(level==2){
-			var text = dbTree.getItemText(id);
+			var text = dbTree.getItemText(id); //id에 해당하는 이름
 			var au = new AjaxUtil("${root}/connection/tables/" + text + "/" + id,null,"get");
 			au.send(tableListCB); 
 		}else if(level==3){
 			var pId= dbTree.getParentId(id);
 			var dbName = dbTree.getItemText(pId);
 			var tableName = dbTree.getUserData(id,"orgText");
+			//alert(tableName);
 			var au = new AjaxUtil("${root}/connection/columns/" + dbName + "/" + tableName,null,"get");
 			au.send(columnListCB);
 		} 
 	});
 }
+
+function sqlCB(res){
+	if(res.error){
+		alert(res.error);
+		return;
+	}
+	  if(res.list){
+		sqlGrid = cLay.attachGrid();
+		var columns = res.list[0];
+		var headerStr = "";
+		var colTypeStr = "";
+		for(var key in columns){
+			if(key=="id") continue;
+			headerStr += key + ","; //uiNo,uiPwd,uiId,admin,uiName,uiEmail,
+			colTypeStr += "ro,";
+		}
+		headerStr = headerStr.substr(0, headerStr.length-1);
+		colTypeStr = colTypeStr.substr(0, colTypeStr.length-1);
+		sqlGrid.setColumnIds(headerStr);
+		sqlGrid.setHeader(headerStr);
+		sqlGrid.setColTypes(colTypeStr);
+		sqlGrid.init();
+		sqlGrid.parse({data:res.list},"js");
+	  }
+} 
+
 function tableListCB(res){
 	var parentId = res.parentId;
 	var i=1;
 	for(var table of res.list){
-		var id = parentId + "_" + i++;
-		var text = table.tableName;
+		var id = parentId + "_" + i++; //1_1(parentId)_1, 1_1_2...
+		var text = table.tableName; //level3 애들 이름
 		if(table.tableComment!=""){
-			text += "[" + table.tableComment + "]";
+			text += "[" + table.tableComment + "]"; //tableComment는 논리명
 		}
 		text += ":"+ table.tableSize + "KB"; 
 		dbTree.addItem(id, text, parentId);
@@ -133,13 +161,13 @@ dhtmlxEvent(window,"load",function(){
 				return;
 			}
 			var au = new AjaxUtil("${root}/connection/db_list/" + rowId,null,"get");
-			au.send(dbListCB); 
+			au.send(dbListCB);  
 		}else if(id=="addcon"){
 			popW.show();
 		}
 	})
 	var au = new AjaxUtil("${root}/connection/list",null,"get");
-	au.send(connectionListCB); 
+	au.send(connectionListCB); /* 로컬호스트, 로컬어드민 */
 	
 
 	bLay = bodyLayout.cells("b");
@@ -160,12 +188,12 @@ dhtmlxEvent(window,"load",function(){
 		{type:"input",name:"sqlTa",label:"sql",required:true,rows:10,style:"background-color:#ecf3f9;border:1px solid #39c;width:800"},
 	];
 	var sqlForm = bTabs.tabs("sql").attachForm(sqlFormObj);
-	sqlForm.attachEvent("onButtonClick",function(id){
-		if(id=="runBtn"){
-			if(sqlForm.validate()){
-				alert("우앙!");
-			}
-		}else if(id=="cancelBtn"){
+	sqlForm.attachEvent("onButtonClick",function(name){
+		if(name=="runBtn"){
+			var sql = sqlForm.getItemValue("sqlTa");
+			var au = new AjaxUtil("${root}/connection/sql/"+sql,null,"post");
+			au.send(sqlCB);
+		}else if(name=="cancelBtn"){
 			sqlForm.clear();
 		}
 	});

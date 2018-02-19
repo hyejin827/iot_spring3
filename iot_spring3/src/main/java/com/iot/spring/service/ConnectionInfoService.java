@@ -17,4 +17,5 @@ public interface ConnectionInfoService {
 	List<Map<String,Object>> getDatabaseList(HttpSession hs, int ciNo)throws Exception ;
 	List<TableVO> getTableList(HttpSession hs,String dbName);
 	List<ColumnVO> getColumnList(HttpSession hs, Map<String,String> map);
+	List<Object> getSqlList(HttpSession hs, Map<String,Object> map) throws Exception; 
 }

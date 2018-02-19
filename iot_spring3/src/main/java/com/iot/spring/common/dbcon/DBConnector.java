@@ -16,7 +16,7 @@ public class DBConnector {
 	public void setConnectionInfo(ConnectionInfoVO ci)throws Exception {
 		bds = new BasicDataSource();
 		bds.setDriverClassName("org.mariadb.jdbc.Driver");
-		String url = "jdbc:mysql://" + ci.getCiUrl() + ":" + ci.getCiPort();
+		String url = "jdbc:mysql://" + ci.getCiUrl() + ":" + ci.getCiPort() +"/"+ ci.getCiDatabase();
 		bds.setUrl(url);
 		bds.setUsername(ci.getCiUser());
 		bds.setPassword(ci.getCiPwd());

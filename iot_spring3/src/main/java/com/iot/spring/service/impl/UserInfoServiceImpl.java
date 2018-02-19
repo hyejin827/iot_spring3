@@ -21,6 +21,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 		rMap.put("msg", "아이디 비밀번호를 확인해주세요.");
 		rMap.put("biz", false);
 		if(ui!=null) {
+			rMap.put("user", ui.getUiId());
 			rMap.put("msg", ui.getUiName() + "님 로그인에 성공하셨습니다.");
 			rMap.put("biz", true);
 			return true;
