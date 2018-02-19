@@ -104,10 +104,31 @@ public class ConnectionInfoController {
 			@PathVariable("sql") String sql,
 			Map<String,Object> map,HttpSession hs) {
 		Map<String,Object> sqlMap = new HashMap<String,Object>();
+		
+		//delete from user_info where uiNo=?
+		//update user_info set uiNo=? where uiNo=?
+		
+		String selectSql = "";
 		sqlMap.put("sql", sql);
 		List<Object> sqlResult = cis.getSqlList(hs,sqlMap);
+
+		if(sql.indexOf("delete")!=-1) {
+			int deleteIdx = sql.indexOf("m")+2;
+			sql = sql.substring(deleteIdx,sql.indexOf("where"));
+			selectSql = "select * from "+ sql;
+			sqlMap.put("sql", selectSql);
+			sqlResult = cis.getSqlList(hs, sqlMap);
+			
+		}else if(sql.indexOf("update")!=-1) {
+			int updateIdx = sql.indexOf("e")+2;
+			sql = sql.substring(updateIdx, sql.indexOf("set"));
+			selectSql = "select * from "+ sql;
+			sqlMap.put("sql", selectSql);
+			sqlResult = cis.getSqlList(hs, sqlMap);
+		}
+		
 		System.out.println(sqlResult);
-		map.put("list", sqlResult);
-		return map;
+		sqlMap.put("list", sqlResult);
+		return sqlMap;
 	}
 }

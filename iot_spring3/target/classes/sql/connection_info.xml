@@ -9,7 +9,7 @@
 		,ciPwd, ciEtc, ciNo as id, ciName as text, uiId
 		from connection_info
 		where uiId = #{uiId}
-	</select>
+	</select>	
 	<select id="selectConnectionInfoWithCiNo" parameterType="int" resultType="ci">
 		select
 		ciNo, ciName, ciUrl, ciPort, ciDatabase, ciUser
