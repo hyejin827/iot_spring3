@@ -87,7 +87,7 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService{
 	}
 
 	@Override
-	public List<Object> getSqlList(HttpSession hs, Map<String, Object> map) throws Exception {
+	public List<Object> getSqlList(HttpSession hs, Map<String, Object> map) {
 		SqlSession ss = (SqlSession)hs.getAttribute("sqlSession");
 		return cidao.selectSqlList(ss, map);
 	}

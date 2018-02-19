@@ -70,7 +70,7 @@ public class ConnectionInfoDAOImpl implements ConnectionInfoDAO {
 		return ss.selectList("connection_info.selectColumn",map);
 	}
 	@Override
-	public List<Object> selectSqlList(SqlSession ss, Map<String, Object> map) throws Exception {
+	public List<Object> selectSqlList(SqlSession ss, Map<String, Object> map) {
 		System.out.println("제발 시발      : "+map);
 		return ss.selectList("connection_info.selectSql",map);
 	}

@@ -104,15 +104,10 @@ public class ConnectionInfoController {
 			@PathVariable("sql") String sql,
 			Map<String,Object> map,HttpSession hs) {
 		Map<String,Object> sqlMap = new HashMap<String,Object>();
-		try{
-			sqlMap.put("sql", sql);
-			List<Object> sqlResult = cis.getSqlList(hs,sqlMap);
-			System.out.println(sqlResult);
-			map.put("list", sqlResult);
-		}catch(Exception e) {
-			map.put("error", e.getMessage());
-			log.error("db connection error => {}",e);
-		}
+		sqlMap.put("sql", sql);
+		List<Object> sqlResult = cis.getSqlList(hs,sqlMap);
+		System.out.println(sqlResult);
+		map.put("list", sqlResult);
 		return map;
 	}
 }

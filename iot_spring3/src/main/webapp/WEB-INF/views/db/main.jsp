@@ -87,8 +87,8 @@ function connectionListCB(res){
 }
 
 function sqlCB(res){
-	if(res.error){
-		alert(res.error);
+	if(res.errorMsg){
+		alert(res.errorMsg);
 		return;
 	}
 	  if(res.list){
