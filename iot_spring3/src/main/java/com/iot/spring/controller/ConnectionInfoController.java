@@ -33,14 +33,14 @@ public class ConnectionInfoController {
 	@Autowired
 	private ConnectionInfoService cis;
 	@RequestMapping("/list")
-	public @ResponseBody Map<String,Object> getConnectionList(HttpSession hs,Map<String,Object>map){
+	public @ResponseBody Map<String,Object> getConnectionList(HttpSession hs,Map<String,Object>map){ //로그인했던 user를 기억하고 있음
 		UserInfoVO ui = new UserInfoVO();
 		if(hs.getAttribute("user")!=null) {
-			ui = (UserInfoVO)hs.getAttribute("user");
+			ui = (UserInfoVO)hs.getAttribute("user"); 
 		}else {
 			ui.setUiId("red");
 		}
-		List<ConnectionInfoVO> ciList = cis.getConnectionInfoList(ui.getUiId());
+		List<ConnectionInfoVO> ciList = cis.getConnectionInfoList(ui.getUiId()); //red로 로그인했기때문에 uiId가 red인 애들 다 가져옴
 		map.put("list", ciList);
 		return map;
 	}
@@ -102,7 +102,7 @@ public class ConnectionInfoController {
 	@RequestMapping(value="/sql/{sql}", method=RequestMethod.POST)
 	public @ResponseBody Map<String,Object> getSql(
 			@PathVariable("sql") String sql,
-			Map<String,Object> map,HttpSession hs) {
+			HttpSession hs) {
 		Map<String,Object> sqlMap = new HashMap<String,Object>();
 		
 		//delete from user_info where uiNo=?

@@ -69,6 +69,7 @@ function connectionListCB(res){
 	dbTree = aLay.attachTreeView({
 	    items: res.list
 	});
+	console.log(res.list);
 	dbTree.attachEvent("onDblClick",function(id){ //id가 1_1, 1_1_1이케 들어옴
 		var level = dbTree.getLevel(id);
 		if(level==2){
