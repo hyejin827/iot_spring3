@@ -55,7 +55,7 @@ public class NaverTransDAOImpl implements NaverTransDAO {
 	         con.setRequestProperty("X-Naver-Client-Secret", this.clientSecret);
 	         con.setDefaultRequestProperty("Content-Type", this.contentType);
 	         // post request
-	         String postParams = "source=" + this.source + "&target=" + this.target + "&text=" + text;
+	         String postParams = "source=" + this.source + "&target=" + this.target + "&text=" + text.substring(0,30);
 	         con.setDoOutput(true);
 	         DataOutputStream wr = new DataOutputStream(con.getOutputStream());
 	         wr.writeBytes(postParams);

@@ -20,6 +20,7 @@ public class ConnectionInfoVO {
 	private String text;
 	private Object[] items;
 	private String sql;
+	private String tableName;
 	
 	public int getId() {
 		return id;
@@ -99,12 +100,18 @@ public class ConnectionInfoVO {
 	public void setSql(String sql) {
 		this.sql = sql;
 	}
+	public String getTableName() {
+		return tableName;
+	}
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
 	@Override
 	public String toString() {
 		return "ConnectionInfoVO [ciNo=" + ciNo + ", ciName=" + ciName + ", ciUrl=" + ciUrl + ", ciPort=" + ciPort
 				+ ", ciDatabase=" + ciDatabase + ", ciUser=" + ciUser + ", ciPwd=" + ciPwd + ", ciEtc=" + ciEtc
 				+ ", uiId=" + uiId + ", id=" + id + ", text=" + text + ", items=" + Arrays.toString(items) + ", sql="
-				+ sql + "]";
+				+ sql + ", tableName=" + tableName + "]";
 	}
 	
 }

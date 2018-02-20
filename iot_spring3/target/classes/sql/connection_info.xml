@@ -27,7 +27,7 @@
 		show databases
 	</select>
 	
-	<select id="selectTable" resultType="tvo" parameterType="string" >
+	<select id="selectTable" resultType="tvo" parameterType="map" >
 		select table_name as tableName,
 		table_comment as tableComment,
 		(data_length+index_length)/1024 as tableSize 
@@ -50,7 +50,11 @@
 		order by ordinal_position;
 	</select>
 	
-	<select id="selectSql" resultType="map" parameterType="map">
-		${sql}
+	<select id="selectTableName" resultType="map" parameterType="map">
+		select * from ${tableName}
+	</select>
+	
+	<select id="selectSql" resultType="map" parameterType="String">
+		${value}
 	</select>
 </mapper>  

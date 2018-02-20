@@ -1,5 +1,6 @@
 package com.iot.spring.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,42 +94,89 @@ public class ConnectionInfoController {
 		map.put("list", columnList);
 		return map;
 	}
+	
+	@RequestMapping(value="/tables/{tableName}", method=RequestMethod.GET)
+	public @ResponseBody Map<String,Object> getTableList(
+			@PathVariable("tableName")String tableName, 
+			HttpSession hs,
+			Map<String,Object> map) {
+		Map<String, String> pMap = new HashMap<String, String>();
+		pMap.put("tableName", tableName);
+		System.out.println(tableName);
+		List<Object> tableList = cis.getTableList(hs, pMap);
+		map.put("tableList", tableList);
+		System.out.println(tableList);
+		return map;
+	}
+	
 	@RequestMapping(value="/columns", method=RequestMethod.GET)
 	public @ResponseBody Map<String,Object> getColumnList(Map<String,Object> map) {
 		//cis.getColumnList(hs, map)
 		return map;
 	}
-
-	@RequestMapping(value="/sql/{sql}", method=RequestMethod.POST)
-	public @ResponseBody Map<String,Object> getSql(
-			@PathVariable("sql") String sql,
-			HttpSession hs) {
-		Map<String,Object> sqlMap = new HashMap<String,Object>();
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value="/sql", method=RequestMethod.POST)
+	public @ResponseBody Map<String,Object> getSql2(@RequestParam Map<String,Object> map, HttpSession hs){
+		List<Object> sqlList = new ArrayList<Object>();
+		String sqls = (String)map.get("sqlTa");	
+		String[] sqlArr = sqls.split(";");
 		
-		//delete from user_info where uiNo=?
-		//update user_info set uiNo=? where uiNo=?
+		//List<Object> getSqlList(HttpSession hs, Map<String,Object> map);
 		
-		String selectSql = "";
-		sqlMap.put("sql", sql);
-		List<Object> sqlResult = cis.getSqlList(hs,sqlMap);
-
-		if(sql.indexOf("delete")!=-1) {
-			int deleteIdx = sql.indexOf("m")+2;
-			sql = sql.substring(deleteIdx,sql.indexOf("where"));
-			selectSql = "select * from "+ sql;
-			sqlMap.put("sql", selectSql);
-			sqlResult = cis.getSqlList(hs, sqlMap);
-			
-		}else if(sql.indexOf("update")!=-1) {
-			int updateIdx = sql.indexOf("e")+2;
-			sql = sql.substring(updateIdx, sql.indexOf("set"));
-			selectSql = "select * from "+ sql;
-			sqlMap.put("sql", selectSql);
-			sqlResult = cis.getSqlList(hs, sqlMap);
+		for(int i=0;i<sqlArr.length;i++) {
+			if(sqlArr[i].indexOf("select")!=-1) {
+				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+				
+			}else if(sqlArr[i].indexOf("update")!=-1) {
+				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+				
+			}else if(sqlArr[i].indexOf("delete")!=-1) {
+				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+				
+			}else if(sqlArr[i].indexOf("insert")!=-1) {
+				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+				
+			}
 		}
-		
-		System.out.println(sqlResult);
-		sqlMap.put("list", sqlResult);
-		return sqlMap;
+		map.put("list", sqlList);
+		return map;
 	}
+
+//	@RequestMapping(value="/sql/{sql}", method=RequestMethod.POST)
+//	public @ResponseBody Map<String,Object> getSql(
+//			@PathVariable("sql") String sql,
+//			HttpSession hs) {
+//		Map<String,Object> sqlMap = new HashMap<String,Object>();
+//		
+//		System.out.println("나 sql!!!!!"+sql);
+//		sqlMap.put("sql", sql);
+//		List<Object> sqlResult = cis.getSqlList(hs,sqlMap);		
+//
+//		String selectSql = "";
+//	 	if(sql.indexOf("delete")!=-1) {
+//			int deleteIdx = sql.indexOf("m")+2;
+//			sql = sql.substring(deleteIdx,sql.indexOf("where"));
+//			selectSql = "select * from "+ sql;
+//			sqlMap.put("sql", selectSql);
+//			sqlResult = cis.getSqlList(hs, sqlMap);
+//			
+//		}else if(sql.indexOf("update")!=-1) {
+//			int updateIdx = sql.indexOf("e")+2;
+//			sql = sql.substring(updateIdx, sql.indexOf("set"));
+//			selectSql = "select * from "+ sql;
+//			sqlMap.put("sql", selectSql);
+//			sqlResult = cis.getSqlList(hs, sqlMap);
+//		}	
+//		
+//		sqlMap.put("list", sqlResult);
+//		
+//		String logFooter = sql + " /* Affected row: +? 찾은 행: ? 경고: ? 지속 시간 ? 쿼리: ?. */ ";
+//		sqlMap.put("logFooter", logFooter);
+//		return sqlMap;
+//	}
 }

@@ -43,7 +43,7 @@ var bodyLayout, dbTree,winF,popW;
 var aLay, bLay, cLay;
 var bTabs, bTab1, bTab2, bTab3;
 var tableInfoGrid;
-var sqlGrid;
+var sqlGrid, sqlTab;
 function columnListCB(res){
 	if(res.list){
 		tableInfoGrid = bTabs.tabs("tableInfo").attachGrid();
@@ -62,6 +62,24 @@ function columnListCB(res){
 		tableInfoGrid.setColTypes(colTypeStr);
         tableInfoGrid.init();
 		tableInfoGrid.parse({data:res.list},"js");
+		console.log(res);
+	}else if(res.tableList){
+		tableInfoGrid = bTabs.tabs("tableData").attachGrid();
+		var columns = res.tableList[0];
+		var headerStr = "";
+		var colTypeStr = "";
+		for(var key in columns){
+			if(key=="id") continue;
+			headerStr += key + ",";
+			colTypeStr += "ro,";
+		}
+		headerStr = headerStr.substr(0, headerStr.length-1);
+		colTypeStr = colTypeStr.substr(0, colTypeStr.length-1);
+        tableInfoGrid.setColumnIds(headerStr);
+		tableInfoGrid.setHeader(headerStr);
+		tableInfoGrid.setColTypes(colTypeStr);
+        tableInfoGrid.init();
+		tableInfoGrid.parse({data:res.tableList},"js");
 		console.log(res);
 	}
 }
@@ -83,33 +101,54 @@ function connectionListCB(res){
 			//alert(tableName);
 			var au = new AjaxUtil("${root}/connection/columns/" + dbName + "/" + tableName,null,"get");
 			au.send(columnListCB);
+			
+			var au = new AjaxUtil("${root}/connection/tables/" + tableName,null,"get");
+			au.send(columnListCB);
 		} 
 	});
 }
 
-function sqlCB(res){
+function sqlCB(xhr,res){
+	res =JSON.parse(res);
+	console.log(res.list[0]);
 	if(res.errorMsg){
 		alert(res.errorMsg);
 		return;
 	}
-	  if(res.list){
-		sqlGrid = cLay.attachGrid();
-		var columns = res.list[0];
-		var headerStr = "";
-		var colTypeStr = "";
-		for(var key in columns){
-			if(key=="id") continue;
-			headerStr += key + ","; //uiNo,uiPwd,uiId,admin,uiName,uiEmail,
-			colTypeStr += "ro,";
+	var idx = 0;
+	for(var tab in res.list[idx]){
+		if(res.list[idx]){
+			sqlTab = cLay.attachTabbar({
+			    align: "left",
+			    mode: "top",
+			    tabs: [
+			        {id: "a"+idx, text: "Tab"+(idx+1), active: true},
+			    ]
+			});
+			
+			sqlGrid = cLay.attachGrid();
+			var columns = res.list[idx][0];
+			var headerStr = "";
+			var colTypeStr = "";
+			for(var key in columns){
+				if(key=="id") continue;
+				headerStr += key + ","; //uiNo,uiPwd,uiId,admin,uiName,uiEmail,
+				colTypeStr += "ro,";
+			}
+			headerStr = headerStr.substr(0, headerStr.length-1);
+			colTypeStr = colTypeStr.substr(0, colTypeStr.length-1);
+			sqlGrid.setColumnIds(headerStr);
+			sqlGrid.setHeader(headerStr);
+			sqlGrid.setColTypes(colTypeStr);
+			sqlGrid.init();
+			sqlGrid.parse({data:res.list[idx]},"js");
 		}
-		headerStr = headerStr.substr(0, headerStr.length-1);
-		colTypeStr = colTypeStr.substr(0, colTypeStr.length-1);
-		sqlGrid.setColumnIds(headerStr);
-		sqlGrid.setHeader(headerStr);
-		sqlGrid.setColTypes(colTypeStr);
-		sqlGrid.init();
-		sqlGrid.parse({data:res.list},"js");
-	  }
+	}
+	
+	if(res.logFooter){
+		var footDiv = document.getElementById('footDiv');
+		footDiv.innerHTML = res.logFooter;
+	}
 } 
 
 function tableListCB(res){
@@ -191,9 +230,13 @@ dhtmlxEvent(window,"load",function(){
 	var sqlForm = bTabs.tabs("sql").attachForm(sqlFormObj);
 	sqlForm.attachEvent("onButtonClick",function(name){
 		if(name=="runBtn"){
-			var sql = sqlForm.getItemValue("sqlTa");
-			var au = new AjaxUtil("${root}/connection/sql/"+sql,null,"post");
-			au.send(sqlCB);
+			if(sqlForm.validate()){
+				/* var sql = sqlForm.getItemValue("sqlTa");
+				var au = new AjaxUtil("${root}/connection/sql/"+sql,null,"post");
+				au.send(sqlCB); */	
+				
+				sqlForm.send("${root}/connection/sql/", "post", sqlCB);
+			}
 		}else if(name=="cancelBtn"){
 			sqlForm.clear();
 		}

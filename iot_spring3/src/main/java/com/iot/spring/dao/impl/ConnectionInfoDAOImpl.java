@@ -1,9 +1,8 @@
 package com.iot.spring.dao.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpSession;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -70,9 +69,14 @@ public class ConnectionInfoDAOImpl implements ConnectionInfoDAO {
 		return ss.selectList("connection_info.selectColumn",map);
 	}
 	@Override
-	public List<Object> selectSqlList(SqlSession ss, Map<String, Object> map) {
-		System.out.println("제발 시발      : "+map);
-		return ss.selectList("connection_info.selectSql",map);
+	public List<Object> selectSqlList(SqlSession ss, String str) {
+		System.out.println("제발      : "+str);
+		return ss.selectList("connection_info.selectSql",str);
+	}
+	@Override
+	public List<Object> selectTableList(SqlSession ss, Map<String, String> map) {
+		System.out.println("제발      : "+map);
+		return ss.selectList("connection_info.selectTableName",map);
 	}
 
 }
