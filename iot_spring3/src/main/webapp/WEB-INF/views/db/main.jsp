@@ -115,18 +115,14 @@ function sqlCB(xhr,res){
 		alert(res.errorMsg);
 		return;
 	}
-	var idx = 0;
-	for(var tab in res.list[idx]){
-		if(res.list[idx]){
-			sqlTab = cLay.attachTabbar({
-			    align: "left",
-			    mode: "top",
-			    tabs: [
-			        {id: "a"+idx, text: "Tab"+(idx+1), active: true},
-			    ]
-			});
+
+	if(res.list[0]){
+		sqlTab = cLay.attachTabbar();
+		
+		for(var idx in res.list){
+			sqlTab.addTab("TAB"+idx,"TAB", null, null, true, true);
+			sqlGrid = sqlTab.tabs("TAB"+idx).attachGrid();
 			
-			sqlGrid = cLay.attachGrid();
 			var columns = res.list[idx][0];
 			var headerStr = "";
 			var colTypeStr = "";
