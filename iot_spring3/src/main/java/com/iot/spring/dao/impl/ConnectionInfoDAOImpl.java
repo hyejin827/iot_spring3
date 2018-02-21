@@ -78,5 +78,11 @@ public class ConnectionInfoDAOImpl implements ConnectionInfoDAO {
 		System.out.println("제발      : "+map);
 		return ss.selectList("connection_info.selectTableName",map);
 	}
-
+	@Override
+	public int UDISqlList(SqlSession ss, String str) {
+		int result = ss.update("connection_info.UDISql",str);
+		System.out.println("str :   "+str);
+		System.out.println("result :    "+result);
+		return result;
+	}
 }

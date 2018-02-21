@@ -19,5 +19,7 @@ public interface ConnectionInfoDAO {
 	List<TableVO> selectTableList(SqlSession ss, String dbName);
 	List<ColumnVO> selectColumnList(SqlSession ss, Map<String,String> map);
 	List<Object> selectTableList(SqlSession ss, Map<String,String> map);
+	
 	List<Object> selectSqlList(SqlSession ss, String str);
+	int UDISqlList(SqlSession ss, String str);
 }

@@ -21,4 +21,5 @@ public interface ConnectionInfoService {
 	
 	
 	List<Object> getSqlList(HttpSession hs, String str);
+	int UDISqlList(HttpSession hs, String str);
 }

@@ -37,7 +37,7 @@ public class ConnectionInfoController {
 	public @ResponseBody Map<String,Object> getConnectionList(HttpSession hs,Map<String,Object>map){ //로그인했던 user를 기억하고 있음
 		UserInfoVO ui = new UserInfoVO();
 		if(hs.getAttribute("user")!=null) {
-			ui = (UserInfoVO)hs.getAttribute("user"); 
+			ui.setUiId(hs.getAttribute("user").toString()); 
 		}else {
 			ui.setUiId("red");
 		}
@@ -63,8 +63,9 @@ public class ConnectionInfoController {
 	}
 
 	@RequestMapping(value="/insert", method=RequestMethod.POST)
-	public @ResponseBody Map<String,Object> insertConnectionInfo(@RequestParam Map<String,Object> map) {
+	public @ResponseBody Map<String,Object> insertConnectionInfo(@RequestParam Map<String,Object> map, HttpSession hs) {
 		ConnectionInfoVO ci = om.convertValue(map, ConnectionInfoVO.class);
+		ci.setUiId(hs.getAttribute("user").toString());
 		log.info("ci=>{}",ci);
 		cis.insertConnectionInfo(map, ci);
 		return map;
@@ -123,27 +124,39 @@ public class ConnectionInfoController {
 	@RequestMapping(value="/sql", method=RequestMethod.POST)
 	public @ResponseBody Map<String,Object> getSql2(@RequestParam Map<String,Object> map, HttpSession hs){
 		List<Object> sqlList = new ArrayList<Object>();
+		List<Object> UDISqlList = new ArrayList<Object>();
 		String sqls = (String)map.get("sqlTa");	
 		String[] sqlArr = sqls.split(";");
+//		
+//		for(int i=0;i<sqlArr.length;i++) {
+//			if(sqlArr[i].indexOf("select")!=-1) {
+//				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+//				
+//			}else {
+//				UDISqlList.add(cis.UDISqlList(hs, sqlArr[i]));
+//				
+//			}
+//		}
 		
-		//List<Object> getSqlList(HttpSession hs, Map<String,Object> map);
-		
-		for(int i=0;i<sqlArr.length;i++) {
-			if(sqlArr[i].indexOf("select")!=-1) {
-				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+		for(String str : sqlArr) {
+			str.trim();
+			if(str.indexOf("select")!=-1) {
+				sqlList.add(cis.getSqlList(hs, str));
 				
-			}else if(sqlArr[i].indexOf("update")!=-1) {
-				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
-				
-			}else if(sqlArr[i].indexOf("delete")!=-1) {
-				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
-				
-			}else if(sqlArr[i].indexOf("insert")!=-1) {
-				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
+			}else {
+				UDISqlList.add(cis.UDISqlList(hs, str));
+				System.out.println(str);
 				
 			}
 		}
+		
+		//String logFooter = sql + " /* Affected row: +? 찾은 행: ? 경고: ? 지속 시간 ? 쿼리: ?. */ ";
+
+		System.out.println("너 나오니?????"+UDISqlList);
 		map.put("list", sqlList);
+		map.put("UDISql", UDISqlList);
+		//map.put("logFooter", logFooter);
+		System.out.println("너 나오니?????"+map.get("UDISql"));
 		return map;
 	}
 

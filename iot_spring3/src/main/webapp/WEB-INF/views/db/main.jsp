@@ -168,8 +168,8 @@ function addConnectionCB(loader,res){
 }
 function dbListCB(res){
 	console.log(res);
-	if(res.error){
-		alert(res.error);
+	if(res.errorMsg){
+		alert(res.errorMsg);
 		return;
 	}
 	var parentId = res.parentId;
@@ -252,7 +252,6 @@ dhtmlxEvent(window,"load",function(){
 				{type:"input",name:"ciUser", label:"유저ID",required:true},
 				{type:"password",name:"ciPwd", label:"비밀번호",required:true},
 				{type:"input",name:"ciEtc", label:"설명"},
-				{type:"input", name:"uiId", label:"uiID", required : true},
 				{type: "block", blockOffset: 0, list: [
 					{type: "button", name:"saveBtn",value: "저장"},
 					{type: "newcolumn"},
