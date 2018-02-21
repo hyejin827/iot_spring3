@@ -34,6 +34,7 @@ div.controls {
 	padding: 5px 10px;
 	height: 70px;
 	border: 1px solid #dfdfdf;
+	overflow: auto;
 }
 
 </style>
@@ -62,7 +63,6 @@ function columnListCB(res){
 		tableInfoGrid.setColTypes(colTypeStr);
         tableInfoGrid.init();
 		tableInfoGrid.parse({data:res.list},"js");
-		console.log(res);
 	}else if(res.tableList){
 		tableInfoGrid = bTabs.tabs("tableData").attachGrid();
 		var columns = res.tableList[0];
@@ -80,14 +80,12 @@ function columnListCB(res){
 		tableInfoGrid.setColTypes(colTypeStr);
         tableInfoGrid.init();
 		tableInfoGrid.parse({data:res.tableList},"js");
-		console.log(res);
 	}
 }
 function connectionListCB(res){
 	dbTree = aLay.attachTreeView({
 	    items: res.list
 	});
-	console.log(res.list);
 	dbTree.attachEvent("onDblClick",function(id){ //id가 1_1, 1_1_1이케 들어옴
 		var level = dbTree.getLevel(id);
 		if(level==2){
@@ -110,40 +108,55 @@ function connectionListCB(res){
 
 function sqlCB(xhr,res){
 	res =JSON.parse(res);
-	console.log(res.list[0]);
+	var footer, footerSql;
+	
+	var footDiv = document.getElementById('resultMsg');
+	footDiv.innerHTML = "";
+
 	if(res.errorMsg){
 		alert(res.errorMsg);
 		return;
 	}
-
+	
+	sqlTab = cLay.attachTabbar();
+	
 	if(res.list[0]){
-		sqlTab = cLay.attachTabbar();
-		
 		for(var idx in res.list){
 			sqlTab.addTab("TAB"+idx,"TAB", null, null, true, true);
 			sqlGrid = sqlTab.tabs("TAB"+idx).attachGrid();
-			
+		
 			var columns = res.list[idx][0];
 			var headerStr = "";
 			var colTypeStr = "";
+			var headerStyle = [];
 			for(var key in columns){
 				if(key=="id") continue;
 				headerStr += key + ","; //uiNo,uiPwd,uiId,admin,uiName,uiEmail,
 				colTypeStr += "ro,";
+				headerStyle.push("color:pink;")
 			}
 			headerStr = headerStr.substr(0, headerStr.length-1);
 			colTypeStr = colTypeStr.substr(0, colTypeStr.length-1);
 			sqlGrid.setColumnIds(headerStr);
-			sqlGrid.setHeader(headerStr);
+			sqlGrid.setHeader(headerStr,null,headerStyle);
 			sqlGrid.setColTypes(colTypeStr);
 			sqlGrid.init();
 			sqlGrid.parse({data:res.list[idx]},"js");
+			
+			footerSql = "/* Affected rows: " + 0 + " 찾은 행: " + res.columnIdx[idx] + " 경고: " + 0 + " 쿼리: " + (res.time*0.001) + "sec" + " */";
+			footer = res.sqlQuery[idx] + "<br>" + footerSql + "<br>";
+			footDiv.innerHTML += footer;
 		}
 	}
 	
-	if(res.logFooter){
-		var footDiv = document.getElementById('footDiv');
-		footDiv.innerHTML = res.logFooter;
+	if(res.UDISqlQuery[0]){
+		for(var idx in res.UDISql){
+			alert(res.UDISql[idx]);
+				
+			footerSql = "/* Affected rows: " + res.UDISql[idx] + " 찾은 행: " + 0 + " 경고: " + 0 + " 쿼리: " + (res.time*0.001) + "sec" + " */";
+			footer = res.UDISqlQuery[idx] + "<br>" + footerSql + "<br>";
+			footDiv.innerHTML += footer;
+		}
 	}
 } 
 
@@ -167,7 +180,6 @@ function addConnectionCB(loader,res){
 	alert(res.msg);
 }
 function dbListCB(res){
-	console.log(res);
 	if(res.errorMsg){
 		alert(res.errorMsg);
 		return;
@@ -275,7 +287,7 @@ dhtmlxEvent(window,"load",function(){
 </script>
 <body>
 	<div id="footDiv" class="my_ftr">
-		<div class="text">log</div>
+		<div id="resultMsg" class="text">log</div>
 	</div>
 </body>
 </html>

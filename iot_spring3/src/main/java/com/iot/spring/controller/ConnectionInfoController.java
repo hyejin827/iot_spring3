@@ -114,82 +114,45 @@ public class ConnectionInfoController {
 	public @ResponseBody Map<String,Object> getColumnList(Map<String,Object> map) {
 		//cis.getColumnList(hs, map)
 		return map;
-	}
-	
-	
-	
-	
-	
+	}	
 	
 	@RequestMapping(value="/sql", method=RequestMethod.POST)
 	public @ResponseBody Map<String,Object> getSql2(@RequestParam Map<String,Object> map, HttpSession hs){
+		long startTime = System.currentTimeMillis();
+		
 		List<Object> sqlList = new ArrayList<Object>();
 		List<Object> UDISqlList = new ArrayList<Object>();
+		List<Object> columnIdx = new ArrayList<Object>();
+		List<Object> sqlQuery = new ArrayList<Object>();
+		List<Object> UDISqlQuery = new ArrayList<Object>();
 		String sqls = (String)map.get("sqlTa");	
 		String[] sqlArr = sqls.split(";");
-//		
-//		for(int i=0;i<sqlArr.length;i++) {
-//			if(sqlArr[i].indexOf("select")!=-1) {
-//				sqlList.add(cis.getSqlList(hs, sqlArr[i]));
-//				
-//			}else {
-//				UDISqlList.add(cis.UDISqlList(hs, sqlArr[i]));
-//				
-//			}
-//		}
 		
 		for(String str : sqlArr) {
 			str.trim();
 			if(str.indexOf("select")!=-1) {
 				sqlList.add(cis.getSqlList(hs, str));
-				
+				columnIdx.add(cis.getSqlList(hs, str).size());
+				sqlQuery.add(str);
 			}else {
 				UDISqlList.add(cis.UDISqlList(hs, str));
-				System.out.println(str);
-				
+				UDISqlQuery.add(str);
 			}
 		}
-		
-		//String logFooter = sql + " /* Affected row: +? 찾은 행: ? 경고: ? 지속 시간 ? 쿼리: ?. */ ";
 
-		System.out.println("너 나오니?????"+UDISqlList);
+		System.out.println("columnIdx  :  "+columnIdx);
+		System.out.println("UDISqlList  :  "+UDISqlList);
+		System.out.println("sqlQuery  :  "+sqlQuery);
+		System.out.println("sqlList는 "+sqlList);
+		
 		map.put("list", sqlList);
 		map.put("UDISql", UDISqlList);
-		//map.put("logFooter", logFooter);
-		System.out.println("너 나오니?????"+map.get("UDISql"));
+		map.put("sqlQuery", sqlQuery);
+		map.put("columnIdx", columnIdx);
+		map.put("UDISqlQuery", UDISqlQuery);
+		
+		long setTime = System.currentTimeMillis()-startTime;
+		map.put("time", setTime);
 		return map;
 	}
-
-//	@RequestMapping(value="/sql/{sql}", method=RequestMethod.POST)
-//	public @ResponseBody Map<String,Object> getSql(
-//			@PathVariable("sql") String sql,
-//			HttpSession hs) {
-//		Map<String,Object> sqlMap = new HashMap<String,Object>();
-//		
-//		System.out.println("나 sql!!!!!"+sql);
-//		sqlMap.put("sql", sql);
-//		List<Object> sqlResult = cis.getSqlList(hs,sqlMap);		
-//
-//		String selectSql = "";
-//	 	if(sql.indexOf("delete")!=-1) {
-//			int deleteIdx = sql.indexOf("m")+2;
-//			sql = sql.substring(deleteIdx,sql.indexOf("where"));
-//			selectSql = "select * from "+ sql;
-//			sqlMap.put("sql", selectSql);
-//			sqlResult = cis.getSqlList(hs, sqlMap);
-//			
-//		}else if(sql.indexOf("update")!=-1) {
-//			int updateIdx = sql.indexOf("e")+2;
-//			sql = sql.substring(updateIdx, sql.indexOf("set"));
-//			selectSql = "select * from "+ sql;
-//			sqlMap.put("sql", selectSql);
-//			sqlResult = cis.getSqlList(hs, sqlMap);
-//		}	
-//		
-//		sqlMap.put("list", sqlResult);
-//		
-//		String logFooter = sql + " /* Affected row: +? 찾은 행: ? 경고: ? 지속 시간 ? 쿼리: ?. */ ";
-//		sqlMap.put("logFooter", logFooter);
-//		return sqlMap;
-//	}
 }

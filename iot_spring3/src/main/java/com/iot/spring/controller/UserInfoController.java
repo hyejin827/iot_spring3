@@ -37,26 +37,27 @@ public class UserInfoController {
 	@RequestMapping(value="/join", method=RequestMethod.POST)
 	public @ResponseBody Map<String, Object> join(@RequestBody UserInfoVO ui){
 		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("msg", "회원가입 실패 임마~");
+		map.put("msg", "회원가입에 실패했습니다.");
 		map.put("biz", false);
 		int result = uis.join(ui);
 		if(result==1) {
-			map.put("msg", "회원가입 성공 임마~");
+			map.put("msg", "회원가입에 성공했습니다.");
 			map.put("biz", true);
 		}else if(result==2) {
-			map.put("msg", "아이디 중복 임마~");
+			map.put("msg", "아이디가 중복되었습니다.");
 		}
 		return map;
 	}
 
-	@RequestMapping(value="/check/{uiId}", method=RequestMethod.GET)
+	@RequestMapping(value="/check/{uiId}", method=RequestMethod.POST)
 	public @ResponseBody Map<String, Object> join2(@PathVariable String uiId){
 		Map<String, Object> map = new HashMap<String, Object>();
 		log.info("insertUI=>{}",uiId);
-		map.put("msg", "아이디 중복 임마~");
+		System.out.println("uiId:   "+uiId);
+		map.put("msg", "아이디가 중복되었습니다.");
 		map.put("biz", false);
 		if(uis.checkUserId(uiId)==0) {
-			map.put("msg", "없는 아이디");
+			map.put("msg", "사용할 수 있는 아이디입니다.");
 			map.put("biz", true);
 		}
 		return map;

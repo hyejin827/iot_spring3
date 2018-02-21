@@ -54,7 +54,7 @@
 		select * from ${tableName}
 	</select>
 	
-	<select id="selectSql" resultType="map" parameterType="String">
+	<select id="selectSql" resultType="java.util.LinkedHashMap" parameterType="String">
 		${value}
 	</select>
 	

@@ -13,7 +13,7 @@
 		winF.attachViewportTo("winVP");
 		popW = winF.createWindow("win1",20,30,450,500);
 		//popW.hide(); 
-		popW.setText("Login");
+		popW.setText("회원가입");
 		popW.hideAll(); 
 		winF.center();
 		var formObj = [
@@ -28,6 +28,8 @@
 					]}, 
 					{type: "block", blockOffset: 0, list: [
 						{type: "button", name:"checkBtn",value: "아이디 중복체크"},
+						{type: "newcolumn"},	
+						{type: "button", name:"joinBtn",value: "회원가입"},
 						{type: "newcolumn"},
 						{type: "button", name:"cancelBtn",value: "취소"},
 						{type: "newcolumn"},
@@ -42,6 +44,10 @@
 					var aud = new AjaxUtilDx("${root}/user/join",form);
 					aud.send(callback);
 				}
+			}else if(id=="checkBtn"){
+				var uiId = form.getItemValue("uiId");
+				var aud = new AjaxUtilDx("${root}/user/check/" + uiId,form);
+				aud.send(callback2);
 			}else if(id=="cancelBtn"){
 				form.clear();
 			}else if(id=="backBtn"){
@@ -55,6 +61,10 @@
 		if(res.biz){
 			location.href="${pPath}/user/login"
 		}
+	}
+	
+	function callback2(res){
+		alert(res.msg);
 	}
 </script>
 <body>
