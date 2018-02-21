@@ -29,6 +29,7 @@ public class UserInfoController {
 	@RequestMapping(value="/login", method=RequestMethod.POST)
 	public @ResponseBody Map<String, Object> login( UserInfoVO ui, HttpSession hs){
 		Map<String, Object> map = new HashMap<String, Object>();
+		System.out.println(ui);
 		if(uis.login(map, ui)) {
 			hs.setAttribute("user", map.get("user"));
 		}

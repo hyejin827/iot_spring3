@@ -115,6 +115,7 @@ function sqlCB(xhr,res){
 
 	if(res.errorMsg){
 		alert(res.errorMsg);
+		footDiv.innerHTML = "에러발생";
 		return;
 	}
 	
