@@ -64,12 +64,14 @@ public class ConnectionInfoServiceImpl implements ConnectionInfoService{
 		hs.setAttribute("sqlSession", ss);
 		log.info("sqlSession=>{}",ss);
 		List<Map<String,Object>> dbList = cidao.selectDatabaseList(ss);
+		System.out.println("dbList!!!!"+dbList);
 		int idx = 0;
 		for(Map<String,Object> mDb : dbList) {
 			mDb.put("id", ciNo + "_" + (++idx));
 			mDb.put("text", mDb.get("Database"));
-			mDb.put("items", new Object[] {});
+			//mDb.put("items", new Object[] {});
 		}
+		System.out.println("dbList는 "+ dbList);
 		return dbList;
 	}
 

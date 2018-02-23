@@ -83,6 +83,9 @@ function columnListCB(res){
 	}
 }
 function connectionListCB(res){
+	if(res.msg){
+		alert(res.msg);
+	}
 	dbTree = aLay.attachTreeView({
 	    items: res.list
 	});
@@ -234,7 +237,7 @@ dhtmlxEvent(window,"load",function(){
 			{type: "newcolumn"},
 			{type: "button", name:"cancelBtn",value: "취소"} 
 		]},
-		{type:"input",name:"sqlTa",label:"sql",required:true,rows:10,style:"background-color:#ecf3f9;border:1px solid #39c;width:800"},
+		{type:"input",name:"sqlTa",label:"sql",required:true,rows:10,style:"background-color:#ecf3f9;border:1px solid #39c;width:1500; height:300"},
 	];
 	var sqlForm = bTabs.tabs("sql").attachForm(sqlFormObj);
 	sqlForm.attachEvent("onButtonClick",function(name){

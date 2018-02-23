@@ -11,7 +11,7 @@
 	$(document).ready(function(){
 		winF = new dhtmlXWindows();
 		winF.attachViewportTo("winVP");
-		popW = winF.createWindow("win1",20,30,450,500);
+		popW = winF.createWindow("win1",20,30,420,500);
 		//popW.hide(); 
 		popW.setText("회원가입");
 		popW.hideAll(); 

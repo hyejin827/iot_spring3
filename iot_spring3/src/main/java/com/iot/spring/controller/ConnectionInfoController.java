@@ -39,7 +39,7 @@ public class ConnectionInfoController {
 		if(hs.getAttribute("user")!=null) {
 			ui.setUiId(hs.getAttribute("user").toString()); 
 		}else {
-			ui.setUiId("red");
+			map.put("msg", "로그인을 먼저 해주세요");
 		}
 		List<ConnectionInfoVO> ciList = cis.getConnectionInfoList(ui.getUiId()); //red로 로그인했기때문에 uiId가 red인 애들 다 가져옴
 		map.put("list", ciList);
